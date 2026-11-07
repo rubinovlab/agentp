@@ -615,7 +615,7 @@ HOME = [
 <p class="citation">Tang K.*, Hoang N.*, Sardaripour N., Capra T., Rubinov M. <em>Associations of estimated gene expression with neuroimaging phenotypes across people and brain regions with AGENT-P.</em> Manuscript in preparation.</p>
 <p class="note">* Equal contribution.</p>
 <h3 id="contact">Contact</h3>
-<div class="contact"><a href="mailto:mika.rubinov@vanderbilt.edu">Mika Rubinov</a><a href="mailto:nhung.t.hoang@outlook.com">Nhung Hoang</a><a href="mailto:keyi.tang@vanderbilt.edu">Keyi Tang</a></div>
+<div class="contact"><a href="mailto:mika.rubinov@vanderbilt.edu">Mikail Rubinov</a><a href="mailto:keyi.tang@vanderbilt.edu">Keyi Tang</a><a href="mailto:nhung.t.hoang@outlook.com">Nhung Hoang</a></div>
 <p class="note">For bug reports and usage questions, <a href="%REPO%/issues">open an issue on GitHub</a>.</p>
 '''),
 ]
