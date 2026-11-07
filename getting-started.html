@@ -86,7 +86,7 @@ R CMD INSTALL agentp/external/plink2R/plink2R</pre></div>
 <h3>Install with pip (PyPI)</h3>
 <p>AGENT-P is also on <a href="https://pypi.org/project/agentp/">PyPI</a> (Python 3.9 or later):</p>
 <div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">pip install agentp</pre></div>
-<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately. Download the models as below, and tell AGENT-P where they are at the start of each script:</p>
+<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately. Download the expression models (<code>models.tar.gz</code>, about 2 GB: the models of the four TWAS methods for the eight brain regions; see <a href="#models">Download the models</a>), and tell AGENT-P where they are at the start of each script:</p>
 <div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> set_models_dir
 set_models_dir(<span class="s">&#x27;/path/to/models&#x27;</span>)</pre></div>
     </section>
@@ -98,7 +98,7 @@ set_models_dir(<span class="s">&#x27;/path/to/models&#x27;</span>)</pre></div>
 tar -xzf ~/Downloads/models.tar.gz       <span class="c"># change the path if you saved the file elsewhere</span>
 cd ..</pre></div>
 <p>The models are now in <code>agentp/models</code>: models from four TWAS methods for eight brain regions (GTEx v8). In AGENT-P, each method and region has a short code, and any method can be combined with any region, e.g. <code>SummaryTWAS(project, 'FUS', 'hippocampus')</code>:</p>
-<div class="table-scroll"><table>
+<div class="table-scroll"><table class="codes">
   <thead><tr><th scope="col">Method</th><th scope="col">Code</th></tr></thead>
   <tbody>
     <tr><td><a href="https://github.com/hakyimlab/MetaXcan">PrediXcan</a></td><td><code>PDX</code></td></tr>
@@ -107,7 +107,7 @@ cd ..</pre></div>
     <tr><td><a href="http://gusevlab.org/projects/fusion">FUSION</a></td><td><code>FUS</code></td></tr>
   </tbody>
 </table></div>
-<div class="table-scroll"><table>
+<div class="table-scroll"><table class="codes">
   <thead><tr><th scope="col">Brain region</th><th scope="col">Code</th></tr></thead>
   <tbody>
     <tr><td>Dorsolateral prefrontal cortex</td><td><code>dlpfc</code></td></tr>

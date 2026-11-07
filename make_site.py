@@ -95,7 +95,7 @@ CONDA_SUBDIR=osx-64 conda env create -f environment.yml
 <<<Terminal
 pip install agentp
 >>>
-<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately. Download the models as below, and tell AGENT-P where they are at the start of each script:</p>
+<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately. Download the expression models (<code>models.tar.gz</code>, about 2 GB: the models of the four TWAS methods for the eight brain regions; see <a href="#models">Download the models</a>), and tell AGENT-P where they are at the start of each script:</p>
 <<<Python
 from agentp import set_models_dir
 set_models_dir('/path/to/models')
@@ -111,7 +111,7 @@ tar -xzf ~/Downloads/models.tar.gz       # change the path if you saved the file
 cd ..
 >>>
 <p>The models are now in <code>agentp/models</code>: models from four TWAS methods for eight brain regions (GTEx v8). In AGENT-P, each method and region has a short code, and any method can be combined with any region, e.g. <code>SummaryTWAS(project, 'FUS', 'hippocampus')</code>:</p>
-<div class="table-scroll"><table>
+<div class="table-scroll"><table class="codes">
   <thead><tr><th scope="col">Method</th><th scope="col">Code</th></tr></thead>
   <tbody>
     <tr><td><a href="https://github.com/hakyimlab/MetaXcan">PrediXcan</a></td><td><code>PDX</code></td></tr>
@@ -120,7 +120,7 @@ cd ..
     <tr><td><a href="http://gusevlab.org/projects/fusion">FUSION</a></td><td><code>FUS</code></td></tr>
   </tbody>
 </table></div>
-<div class="table-scroll"><table>
+<div class="table-scroll"><table class="codes">
   <thead><tr><th scope="col">Brain region</th><th scope="col">Code</th></tr></thead>
   <tbody>
     <tr><td>Dorsolateral prefrontal cortex</td><td><code>dlpfc</code></td></tr>

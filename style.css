@@ -58,6 +58,9 @@ th, td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var
 th { font-weight: 500; color: var(--muted); }
 th.group { padding-top: 16px; color: var(--text); font-weight: 600; }
 td code { white-space: nowrap; }
+/* model code tables: the same column widths, so that tables one above the other line up */
+table.codes { table-layout: fixed; }
+table.codes th:first-child, table.codes td:first-child { width: 60%; }
 .citation { font-size: 15px; }
 .contact { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; margin-bottom: 16px; }
 footer { border-top: 1px solid var(--line); padding: 20px 0 32px; color: var(--muted); font-size: 12px; }
