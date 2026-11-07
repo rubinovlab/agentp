@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Full run · AGENT-P</title>
+<meta name="description" content="Run TWAS on your own data with AGENT-P: summary-level and genotype-level TWAS, results, plots, and meta-analysis TWAS with ACAT.">
+<link rel="canonical" href="https://agentp.rubinovlab.net/full-run.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Full run · AGENT-P">
+<meta property="og:description" content="Run TWAS on your own data with AGENT-P: summary-level and genotype-level TWAS, results, plots, and meta-analysis TWAS with ACAT.">
+<meta property="og:url" content="https://agentp.rubinovlab.net/full-run.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23245b85'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='15' font-weight='700' fill='white' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="layout" id="top">
+  <aside class="sidebar">
+    <a class="brand" href="index.html">AGENT-P</a>
+    <nav aria-label="Site">
+      <ul class="pages">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="example.html">Example</a></li>
+      <li><a href="full-run.html" aria-current="page">Full run</a>
+        <ol class="sub">
+          <li><a href="#inputs">Input data</a></li>
+          <li><a href="#project">Create a project</a></li>
+          <li><a href="#summary">Summary-level TWAS</a></li>
+          <li><a href="#genotype">Genotype-level TWAS</a></li>
+          <li><a href="#results">Results and plots</a></li>
+          <li><a href="#acat">Meta-analysis TWAS with ACAT</a></li>
+          <li><a href="#options">More options</a></li>
+          <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ol>
+      </li>
+      </ul>
+    </nav>
+    <ul class="ext" aria-label="Project resources">
+      <li><a href="https://colab.research.google.com/github/nhunghoang/agentp/blob/agentp-update-20261105/example/colab_example.ipynb">Try it in Colab</a></li>
+      <li><a href="https://github.com/nhunghoang/agentp/tree/agentp-update-20261105">GitHub</a></li>
+      <li><a href="https://pypi.org/project/agentp/">PyPI</a></li>
+      <li><a href="https://drive.google.com/file/d/1llysnSFOut3E_g1omlgQfi-N5fptuuLa/view?usp=sharing">Models (2 GB)</a></li>
+    </ul>
+  </aside>
+  <div class="content">
+  <main id="main">
+<div class="page-intro">
+  <h1>Full run</h1>
+  <p>Run TWAS on your own data: the input data you need, summary-level and genotype-level TWAS, results and plots, and meta-analysis TWAS with ACAT.</p>
+</div>
+
+    <section id="inputs" aria-labelledby="inputs-title">
+      <h2 id="inputs-title"><span class="num">1.</span>Input data</h2>
+<p>What you need depends on the TWAS you run. Summary-level TWAS needs only a GWAS; genotype-level TWAS (and GWAS) needs the data of individual subjects. Both use the full models (see <a href="getting-started.html#models">Getting started</a>), and all data must use rsIDs for SNPs.</p>
+<div class="table-scroll"><table>
+  <thead><tr><th scope="col">Input</th><th scope="col">Format</th><th scope="col">Added with</th></tr></thead>
+  <tbody>
+    <tr><th scope="row" colspan="3" class="group">Summary-level TWAS</th></tr>
+    <tr><td>GWAS summary statistics</td><td>one file per trait, one row per SNP: SNP ID (rsID), the two alleles, and the effect size (beta) with its standard error or a p-value (see <a href="#summary">column names</a>)</td><td><code>stwas.add_gwas</code></td></tr>
+    <tr><th scope="row" colspan="3" class="group">Genotype-level TWAS and GWAS</th></tr>
+    <tr><td>Subject IDs</td><td>one ID per line, no header</td><td><code>project.set_subjects</code></td></tr>
+    <tr><td>Covariates</td><td>a table with an <code>id</code> column and one column per covariate, e.g. age, sex, and genetic principal components (numbers only, e.g. sex as 0/1)</td><td><code>project.add_covariates</code></td></tr>
+    <tr><td>Phenotypes</td><td>a table with an <code>id</code> column and one column per trait; the column names are the trait names</td><td><code>project.add_phenotypes</code></td></tr>
+    <tr><td>Genotypes</td><td>one BGEN file per chromosome (1&ndash;22), each with a matching <code>.sample</code> file</td><td><code>project.add_genotypes</code></td></tr>
+  </tbody>
+</table></div>
+<ul class="list">
+  <li>The subject IDs must be the same in all files (in the <code>.sample</code> files, both ID columns).</li>
+  <li>Tables are tab-separated by default; for comma-separated tables, add <code>sep=','</code>. To use only some columns, add <code>covar_cols=[...]</code> or <code>phen_cols=[...]</code>.</li>
+  <li>AGENT-P cleans the genotypes before use: it keeps SNPs with less than 5% missing calls, a minor allele frequency of at least 1%, and a Hardy&ndash;Weinberg equilibrium p-value above 1e-5.</li>
+  <li>Genotypes in VCF format can be converted to BGEN with <code>plink2</code> (see <a href="#troubleshooting">Troubleshooting</a>).</li>
+  <li>Example files of every kind are in <code>example/example_data</code>.</li>
+</ul>
+    </section>
+
+    <section id="project" aria-labelledby="project-title">
+      <span id="api"></span>
+      <h2 id="project-title"><span class="num">2.</span>Create a project</h2>
+<p>Write the steps on this page in a Python script (for example <code>my_analysis.py</code>), and run it with <code>python my_analysis.py</code>.</p>
+<p>A project is a folder that keeps the inputs and results of one cohort together.</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> Project
+project = Project(<span class="s">&#x27;my_project&#x27;</span>)     <span class="c"># creates the folder &quot;my_project&quot;</span></pre></div>
+    </section>
+
+    <section id="summary" aria-labelledby="summary-title">
+      <h2 id="summary-title"><span class="num">3.</span>Summary-level TWAS</h2>
+<p>From GWAS summary statistics of a trait:</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> SummaryTWAS
+
+stwas = SummaryTWAS(project, <span class="s">&#x27;JTI&#x27;</span>, <span class="s">&#x27;caudate&#x27;</span>)                  <span class="c"># model method and brain region</span>
+stwas.add_gwas(<span class="s">&#x27;putamen_volume&#x27;</span>, <span class="s">&#x27;putamen_volume_gwas.txt&#x27;</span>)     <span class="c"># trait name and GWAS file</span>
+stwas.run_twas(<span class="s">&#x27;putamen_volume&#x27;</span>)</pre></div>
+<p><strong>Column names.</strong> GWAS files made with AGENT-P's <code>GWAS</code> (see <a href="#options">More options</a>) are read without any extra settings. For other files, including REGENIE's own output, tell AGENT-P the column names:</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0">stwas.add_gwas(<span class="s">&#x27;putamen_volume&#x27;</span>, <span class="s">&#x27;putamen_volume_gwas.txt&#x27;</span>, sep=<span class="s">&#x27;\t&#x27;</span>,
+               snp_col=<span class="s">&#x27;rsid&#x27;</span>, alt_col=<span class="s">&#x27;a2&#x27;</span>, ref_col=<span class="s">&#x27;a1&#x27;</span>,
+               beta_col=<span class="s">&#x27;beta&#x27;</span>, beta_se_col=<span class="s">&#x27;se&#x27;</span>, pval_col=<span class="s">&#x27;pval&#x27;</span>)</pre></div>
+<ul class="list">
+  <li><code>alt_col</code> is the <strong>effect allele</strong>: the allele that the beta refers to. <code>ref_col</code> is the other allele.</li>
+  <li>If your file has a z-score or odds ratio instead of a beta, use <code>zscore_col</code> or <code>or_col</code>.</li>
+  <li>FUSION models need the beta and p-value columns. REGENIE's own output has no p-value column: use <code>sep=' ', snp_col='ID', alt_col='ALLELE1', ref_col='ALLELE0', beta_col='BETA', beta_se_col='SE'</code> (every method except FUSION), or run the GWAS with AGENT-P's <code>GWAS</code>.</li>
+</ul>
+    </section>
+
+    <section id="genotype" aria-labelledby="genotype-title">
+      <h2 id="genotype-title"><span class="num">4.</span>Genotype-level TWAS</h2>
+<p>From individual-level data. First add the subject data to the project (only once per project; see <a href="#inputs">Input data</a> for the file formats):</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0">project.set_subjects(<span class="s">&#x27;subjects.txt&#x27;</span>)             <span class="c"># subject IDs</span>
+project.add_covariates(<span class="s">&#x27;covariates.txt&#x27;</span>)         <span class="c"># e.g. age, sex, genetic principal components</span>
+project.add_phenotypes(<span class="s">&#x27;phenotypes.txt&#x27;</span>)         <span class="c"># one or more traits</span>
+project.add_genotypes(<span class="s">&#x27;genotypes&#x27;</span>, <span class="s">&#x27;chr*.bgen&#x27;</span>)  <span class="c"># folder, and file names with * for the chromosome number</span></pre></div>
+<p>Then predict gene expression and test the traits:</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> IndividualTWAS
+
+itwas = IndividualTWAS(project, <span class="s">&#x27;JTI&#x27;</span>, <span class="s">&#x27;caudate&#x27;</span>)
+itwas.predict_grex()                         <span class="c"># predict gene expression (once per method and region)</span>
+itwas.run_twas(<span class="s">&#x27;putamen_volume&#x27;</span>)             <span class="c"># or a list: [&#x27;putamen_volume&#x27;, &#x27;caudate_volume&#x27;]</span></pre></div>
+    </section>
+
+    <section id="results" aria-labelledby="results-title">
+      <h2 id="results-title"><span class="num">5.</span>Results and plots</h2>
+<p>Each TWAS saves one table per trait (tab-separated, one row per gene):</p>
+<div class="table-scroll"><table>
+  <thead><tr><th scope="col">TWAS</th><th scope="col">Results file</th></tr></thead>
+  <tbody>
+    <tr><td>Summary-level</td><td><code>my_project/sTWAS/JTI_caudate/putamen_volume.csv</code></td></tr>
+    <tr><td>Genotype-level</td><td><code>my_project/iTWAS/JTI_caudate/putamen_volume.csv</code></td></tr>
+  </tbody>
+</table></div>
+<p>The most important columns are <code>gene</code> (Ensembl gene ID), <code>zscore</code> (direction and strength of the association: positive means that higher expression goes with a larger trait value), and <code>pvalue</code>. A common threshold for significance is a Bonferroni correction: p &lt; 0.05 / (number of genes tested).</p>
+<p><strong>Plots</strong> (saved as image files):</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> load_pvalues, manhattan_plot, miami_plot, scatter_plot
+
+s = load_pvalues(<span class="s">&#x27;my_project/sTWAS/JTI_caudate/putamen_volume.csv&#x27;</span>)
+g = load_pvalues(<span class="s">&#x27;my_project/iTWAS/JTI_caudate/putamen_volume.csv&#x27;</span>)
+
+manhattan_plot(g, label=<span class="s">&#x27;Genotype-level TWAS&#x27;</span>, out_file=<span class="s">&#x27;manhattan.png&#x27;</span>)        <span class="c"># one set of results</span>
+miami_plot(s, g, top_label=<span class="s">&#x27;Summary-level TWAS&#x27;</span>, bottom_label=<span class="s">&#x27;Genotype-level TWAS&#x27;</span>,
+           out_file=<span class="s">&#x27;miami.png&#x27;</span>)                                                <span class="c"># two sets, mirrored</span>
+scatter_plot(s, g, x_label=<span class="s">&#x27;Summary-level TWAS&#x27;</span>, y_label=<span class="s">&#x27;Genotype-level TWAS&#x27;</span>,
+             out_file=<span class="s">&#x27;scatter.png&#x27;</span>)                                            <span class="c"># two sets, gene by gene</span></pre></div>
+<p>Significant genes (Bonferroni) are colored, and the dashed lines show the significance thresholds.</p>
+    </section>
+
+    <section id="acat" aria-labelledby="acat-title">
+      <h2 id="acat-title"><span class="num">6.</span>Meta-analysis TWAS with ACAT</h2>
+<p><code>run_all_twas</code> runs TWAS with every model (4 methods &times; 8 brain regions = 32 model sets), then combines the p-values of each gene into one p-value with ACAT (Aggregated Cauchy Association Test):</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> run_all_twas
+
+<span class="c"># summary-level TWAS</span>
+run_all_twas(project, <span class="s">&#x27;putamen_volume&#x27;</span>, twas_type=<span class="s">&#x27;stwas&#x27;</span>,
+             gwas_files={<span class="s">&#x27;putamen_volume&#x27;</span>: <span class="s">&#x27;putamen_volume_gwas.txt&#x27;</span>})
+
+<span class="c"># genotype-level TWAS (after adding the subject data)</span>
+run_all_twas(project, <span class="s">&#x27;putamen_volume&#x27;</span>, twas_type=<span class="s">&#x27;itwas&#x27;</span>)</pre></div>
+<p>The combined results are saved to <code>my_project/sTWAS/ACAT/putamen_volume.csv</code> (or <code>iTWAS/ACAT/</code>). This table has one p-value column per model set, <code>n_models</code> (how many models tested the gene), and the combined p-value (<code>sTWAS_ACAT</code> or <code>iTWAS_ACAT</code>). Genes tested by fewer than 4 models get no combined p-value.</p>
+<p>If your GWAS file is not in REGENIE format, give the column names once for all files: <code>gwas_params={'sep': '\t', 'snp_col': 'rsid', 'alt_col': 'a2', ...}</code>. To combine results that you already ran one model at a time, use <code>collect_twas(project, 'putamen_volume')</code>.</p>
+    </section>
+
+    <section id="options" aria-labelledby="options-title">
+      <h2 id="options-title"><span class="num">7.</span>More options</h2>
+<ul class="list">
+  <li><strong>Run a GWAS</strong> (needs the subject data):
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> GWAS
+GWAS(project).run([<span class="s">&#x27;putamen_volume&#x27;</span>, <span class="s">&#x27;caudate_volume&#x27;</span>])    <span class="c"># saved to my_project/GWAS/</span></pre></div></li>
+  <li><strong>Add other models.</strong> Models in PredictDB format (a <code>.db</code> weights file and a <code>.txt.gz</code> covariance file, e.g. other GTEx tissues) can be added and then used like the built-in ones:
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0">project.add_model(<span class="s">&#x27;PDX&#x27;</span>, <span class="s">&#x27;hypothalamus&#x27;</span>, weights=<span class="s">&#x27;en_Brain_Hypothalamus.db&#x27;</span>,
+                  covariance=<span class="s">&#x27;en_Brain_Hypothalamus.txt.gz&#x27;</span>)
+stwas = SummaryTWAS(project, <span class="s">&#x27;PDX&#x27;</span>, <span class="s">&#x27;hypothalamus&#x27;</span>)</pre></div></li>
+  <li><strong>Run again and replace old results:</strong> add <code>overwrite=True</code>, e.g. <code>stwas.run_twas('putamen_volume', overwrite=True)</code>. Without it, AGENT-P skips results that already exist.</li>
+  <li><strong>Several traits in parallel:</strong> <code>run_twas([...], num_threads=4)</code> runs 4 traits at the same time.</li>
+</ul>
+    </section>
+
+    <section id="troubleshooting" aria-labelledby="troubleshooting-title">
+      <h2 id="troubleshooting-title"><span class="num">8.</span>Troubleshooting</h2>
+<ul class="list">
+  <li><strong>My genotypes are in VCF format.</strong> Convert them to BGEN, one file per chromosome:
+<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">for c in $(seq 1 22); do
+    plink2 --vcf chr${c}.dose.vcf.gz dosage=DS --double-id --export bgen-1.2 bits=8 --out genotypes/chr${c}
+done</pre></div>
+  SNP IDs must be rsIDs. If your VCF uses other IDs (e.g. <code>chr1:12345:A:G</code>), add rsIDs first (e.g. with <code>bcftools annotate</code> and a dbSNP file).</li>
+  <li><strong>Very few genes are tested.</strong> The SNP IDs in your GWAS or genotypes do not match the models: check that they are rsIDs.</li>
+  <li><strong>Problems with the installation:</strong> see <a href="getting-started.html#troubleshooting">Getting started</a>.</li>
+</ul>
+    </section>
+
+    <div class="status" role="status" aria-live="polite" id="copy-status"></div>
+  </main>
+  <footer><a href="https://rubinovlab.net">Rubinov Lab</a>, Vanderbilt University · <a href="https://github.com/nhunghoang/agentp/blob/main/LICENSE">MIT License</a></footer>
+  </div>
+</div>
+<script src="site.js"></script>
+</body>
+</html>

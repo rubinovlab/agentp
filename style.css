@@ -1,0 +1,119 @@
+/* AGENT-P website styles, shared by all pages. The CSS variables below are the canonical design tokens (see DESIGN.md). */
+
+
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff; --text: #252a30; --muted: #59616b;
+  --link: #245b85; --line: #dce1e5; --soft: #f5f7f8;
+  --code-comment: #606972; --code-key: #754a77; --code-string: #316346;
+  --scroll-thumb: #9aa4ae; --scroll-track: #ffffff; --scroll-hover: #697581; --scroll-active: #245b85;
+  --max: 820px; --radius: 4px;
+  --button-text: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #191c20; --text: #e1e5e9; --muted: #afb7c0; --link: #94bedf;
+    --line: #3c434b; --soft: #22272d; --code-comment: #aab4be; --code-key: #d6add8;
+    --code-string: #a6c9ac; --scroll-thumb: #727e8a; --scroll-track: #191c20; --scroll-hover: #a3adb7; --scroll-active: #94bedf;
+    --button-text: #191c20; }
+}
+* { box-sizing: border-box; scrollbar-color: var(--scroll-thumb) var(--scroll-track); scrollbar-width: auto; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--scroll-track); }
+::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border: 3px solid var(--scroll-track); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+::-webkit-scrollbar-thumb:active { background: var(--scroll-active); }
+html { scroll-padding-top: 24px; }
+body { margin: 0; color: var(--text); background: var(--bg); font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+a, button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+button:active, a:active { opacity: .75; }
+.skip { position: absolute; left: 16px; top: -100px; background: var(--bg); padding: 8px; z-index: 5; }
+.skip:focus { top: 8px; }
+.intro, .page-intro { padding: 44px 0 30px; }
+.page-intro h1 { margin-bottom: 14px; }
+h1 { margin: 0 0 8px; font-size: clamp(38px, 6vw, 48px); line-height: 1.15; font-weight: 650; letter-spacing: -.045em; }
+.full-name { margin: 0 0 22px; max-width: 620px; font-size: 19px; line-height: 1.5; color: var(--muted); }
+p { margin: 0 0 16px; }
+.intro p:not(.full-name) { max-width: 740px; }
+.resources { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 23px 0 0; padding: 0; list-style: none; font-size: 14px; }
+section { padding: 32px 0; border-top: 1px solid var(--line); }
+h2 { font-size: 22px; line-height: 1.4; font-weight: 600; letter-spacing: -.02em; margin: 0 0 16px; }
+h3 { font-size: 16px; font-weight: 600; margin: 24px 0 10px; }
+.note { font-size: 13px; line-height: 1.65; color: var(--muted); }
+.note { margin-top: 12px; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+:not(pre) > code { font-size: .87em; overflow-wrap: anywhere; }
+.code { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--soft); overflow: hidden; }
+.code-header { display: flex; align-items: center; justify-content: space-between; min-height: 36px; padding: 3px 10px 3px 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+pre { margin: 0; padding: 16px; overflow-x: auto; line-height: 1.8; color: var(--text); }
+pre .c { color: var(--code-comment); } pre .k { color: var(--code-key); } pre .s { color: var(--code-string); }
+.copy { min-width: 64px; min-height: 28px; padding: 2px 8px; border: 1px solid transparent; border-radius: 3px; background: transparent; color: var(--link); font: inherit; }
+.copy:hover { border-color: var(--line); background: var(--bg); }
+.copy:disabled { color: var(--muted); cursor: wait; }
+.table-scroll { overflow-x: auto; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 500; color: var(--muted); }
+th.group { padding-top: 16px; color: var(--text); font-weight: 600; }
+td code { white-space: nowrap; }
+.citation { font-size: 15px; }
+.contact { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; margin-bottom: 16px; }
+footer { border-top: 1px solid var(--line); padding: 20px 0 32px; color: var(--muted); font-size: 12px; }
+.status { min-height: 22px; font-size: 13px; color: var(--muted); }
+
+.list { margin: 0 0 16px; padding-left: 22px; }
+.list li { margin-bottom: 8px; }
+
+/* homepage: resource buttons (Colab, PyPI, models, GitHub) */
+.buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; }
+.button { display: inline-block; padding: 9px 18px; border-radius: var(--radius); background: var(--link); color: var(--button-text); font-size: 15px; font-weight: 600; text-decoration: none; }
+.button.dark { background: var(--text); color: var(--bg); }
+.button:hover { opacity: .88; text-decoration: none; }
+
+/* layout: the sidebar on the left (sticky), the page on the right */
+.layout { display: grid; grid-template-columns: 210px minmax(0, var(--max)); gap: 64px; width: min(1100px, calc(100% - 48px)); margin-inline: auto; }
+.content { min-width: 0; }
+.sidebar { position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 48px 0 32px; font-size: 14px; }
+.brand { display: block; margin-bottom: 22px; color: var(--text); font-size: 19px; font-weight: 650; letter-spacing: -.03em; text-decoration: none; }
+.sidebar ul, .sidebar ol { margin: 0; padding: 0; list-style: none; }
+.sidebar a:not(.brand) { display: block; padding: 4px 0; color: var(--muted); text-decoration: none; line-height: 1.4; }
+.sidebar a:not(.brand):hover { color: var(--link); text-decoration: underline; }
+.sidebar a[aria-current="page"] { color: var(--text); font-weight: 600; }
+.sidebar .sub { margin: 4px 0 10px 1px; padding-left: 12px; border-left: 1px solid var(--line); font-size: 13px; counter-reset: sub; }
+.sidebar ol.sub > li { counter-increment: sub; }
+.sidebar ol.sub > li > a::before { content: counter(sub) ". "; }
+.sidebar .sub a.active { color: var(--link); }
+.ext { margin-top: 20px !important; padding-top: 14px !important; border-top: 1px solid var(--line); }
+section h2 .num { color: var(--muted); font-weight: 500; margin-right: 6px; }
+
+/* Functions page: each function with its input and output */
+h3.fn { margin: 32px 0 8px; font-size: 16px; font-weight: 600; }
+section h3.fn:first-of-type { margin-top: 4px; }
+h3.fn code { font-size: 15px; overflow-wrap: anywhere; }
+dl.io { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 10px 16px; margin: 14px 0 8px; font-size: 15px; }
+dl.io dt { color: var(--muted); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding-top: 2px; }
+dl.io dd { margin: 0; min-width: 0; }
+dl.io dd .table-scroll { margin: 10px 0 4px; }
+dl.io dd .list { margin: 6px 0 0; }
+
+/* narrow windows: the sidebar becomes a compact block above the page */
+@media (max-width: 900px) {
+  .layout { display: block; width: calc(100% - 36px); }
+  .sidebar { position: static; max-height: none; padding: 20px 0 14px; border-bottom: 1px solid var(--line); }
+  .brand { margin-bottom: 8px; }
+  .sidebar .pages, .ext { display: flex; flex-wrap: wrap; gap: 0 20px; }
+  .sidebar .sub { display: none; }
+  dl.io { grid-template-columns: 1fr; gap: 2px; }
+  dl.io dd { margin-bottom: 10px; }
+  .ext { margin-top: 6px !important; padding-top: 6px !important; border-top: 0; }
+}
+@media (max-width: 600px) {
+  .intro, .page-intro { padding-top: 24px; } .full-name { font-size: 17px; }
+  section { padding-block: 26px; }
+  th, td { font-size: 13px; }
+  pre { font-size: 12px; }
+}
+@media (forced-colors: active) { * { scrollbar-color: auto; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }

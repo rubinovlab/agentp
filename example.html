@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example · AGENT-P</title>
+<meta name="description" content="Run the AGENT-P example in Google Colab or on your computer.">
+<link rel="canonical" href="https://agentp.rubinovlab.net/example.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Example · AGENT-P">
+<meta property="og:description" content="Run the AGENT-P example in Google Colab or on your computer.">
+<meta property="og:url" content="https://agentp.rubinovlab.net/example.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23245b85'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='15' font-weight='700' fill='white' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="layout" id="top">
+  <aside class="sidebar">
+    <a class="brand" href="index.html">AGENT-P</a>
+    <nav aria-label="Site">
+      <ul class="pages">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="example.html" aria-current="page">Example</a>
+        <ol class="sub">
+          <li><a href="#colab">Run it in Google Colab</a></li>
+          <li><a href="#steps">What the notebook does</a></li>
+          <li><a href="#change">Try other models or traits</a></li>
+          <li><a href="#local">Run the example on your computer</a></li>
+        </ol>
+      </li>
+      <li><a href="full-run.html">Full run</a></li>
+      </ul>
+    </nav>
+    <ul class="ext" aria-label="Project resources">
+      <li><a href="https://colab.research.google.com/github/nhunghoang/agentp/blob/agentp-update-20261105/example/colab_example.ipynb">Try it in Colab</a></li>
+      <li><a href="https://github.com/nhunghoang/agentp/tree/agentp-update-20261105">GitHub</a></li>
+      <li><a href="https://pypi.org/project/agentp/">PyPI</a></li>
+      <li><a href="https://drive.google.com/file/d/1llysnSFOut3E_g1omlgQfi-N5fptuuLa/view?usp=sharing">Models (2 GB)</a></li>
+    </ul>
+  </aside>
+  <div class="content">
+  <main id="main">
+<div class="page-intro">
+  <h1>Example</h1>
+  <p>Try AGENT-P on example data in Google Colab, without installing anything, or run the same example on your computer.</p>
+</div>
+
+    <section id="colab" aria-labelledby="colab-title">
+      <span id="quickstart"></span>
+      <h2 id="colab-title"><span class="num">1.</span>Run it in Google Colab</h2>
+<p>The example notebook runs in Google Colab, with nothing to install on your computer. <a href="https://colab.research.google.com/github/nhunghoang/agentp/blob/agentp-update-20261105/example/colab_example.ipynb">Open the example in Colab</a>, then choose <strong>Runtime &rarr; Run all</strong>. The run takes about 20 minutes and needs a Google account.</p>
+<p>The example uses data that comes with AGENT-P:</p>
+<ul class="list">
+  <li><strong>Subjects:</strong> 2,000 example subjects, with genotypes (chromosomes 1&ndash;22), covariates (age, sex, and 3 genetic principal components), and four brain volumes</li>
+  <li><strong>GWAS:</strong> a GWAS of amygdala volume in the same subjects, for the summary-level TWAS</li>
+  <li><strong>Models:</strong> a small set of caudate models</li>
+</ul>
+<p>It tests predicted gene expression in the <strong>caudate</strong> (JTI models) for association with <strong>amygdala volume</strong>.</p>
+    </section>
+
+    <section id="steps" aria-labelledby="steps-title">
+      <h2 id="steps-title"><span class="num">2.</span>What the notebook does</h2>
+<div class="table-scroll"><table>
+  <thead><tr><th scope="col">Step</th><th scope="col">What it does</th></tr></thead>
+  <tbody>
+    <tr><td>1. Install</td><td>downloads AGENT-P from GitHub and installs it with the programs it needs (about 5&ndash;8 minutes)</td></tr>
+    <tr><td>2. Create the project</td><td>loads the example subjects, and quality-controls their genotypes</td></tr>
+    <tr><td>3. Summary-level TWAS</td><td>combines the GWAS of amygdala volume with the JTI caudate models</td></tr>
+    <tr><td>4. Genotype-level TWAS</td><td>predicts caudate gene expression for each subject, then tests it for association with amygdala volume (the longest step)</td></tr>
+    <tr><td>5. Results</td><td>shows how many genes were tested and the top genes of both TWAS</td></tr>
+    <tr><td>6. Plots</td><td>a Manhattan plot of the genotype-level TWAS, and a Miami plot comparing both TWAS</td></tr>
+  </tbody>
+</table></div>
+<p class="note">With only 2,000 subjects, no gene passes the significance threshold; the example shows how AGENT-P works.</p>
+    </section>
+
+    <section id="change" aria-labelledby="change-title">
+      <h2 id="change-title"><span class="num">3.</span>Try other models or traits</h2>
+<p><strong>Another model set:</strong> in the TWAS cells of the notebook, replace <code>'JTI'</code> with <code>'PDX'</code> (PrediXcan), <code>'UTM'</code> (UTMOST), or <code>'FUS'</code> (FUSION), and replace <code>JTI_caudate</code> in the results and plot cells with the matching folder name (e.g. <code>PDX_caudate</code>).</p>
+<p><strong>Another trait:</strong> the genotype-level TWAS can test any of the four example volumes (<code>putamen_volume</code>, <code>amygdala_volume</code>, <code>hippocampus_volume</code>, <code>caudate_volume</code>). The predicted gene expression is reused, so only the association test runs again:</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0">itwas = IndividualTWAS(project, <span class="s">&#x27;JTI&#x27;</span>, <span class="s">&#x27;caudate&#x27;</span>)
+itwas.run_twas(<span class="s">&#x27;hippocampus_volume&#x27;</span>)</pre></div>
+<p>The summary-level TWAS needs a GWAS of the trait; the example includes one for amygdala volume only.</p>
+    </section>
+
+    <section id="local" aria-labelledby="local-title">
+      <h2 id="local-title"><span class="num">4.</span>Run the example on your computer</h2>
+<p>After <a href="getting-started.html">installing AGENT-P</a> (the full models are not needed), run the same example from the <code>agentp</code> folder:</p>
+<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">cd example
+python run_example.py</pre></div>
+<p>It takes about 10 minutes. The results are saved in <code>example/example_run/</code>, and the plots in <code>example/example_run/figures/</code>. To analyze your own data, see <a href="full-run.html">Full run</a>.</p>
+    </section>
+
+    <div class="status" role="status" aria-live="polite" id="copy-status"></div>
+  </main>
+  <footer><a href="https://rubinovlab.net">Rubinov Lab</a>, Vanderbilt University · <a href="https://github.com/nhunghoang/agentp/blob/main/LICENSE">MIT License</a></footer>
+  </div>
+</div>
+<script src="site.js"></script>
+</body>
+</html>
