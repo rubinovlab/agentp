@@ -55,38 +55,48 @@ def render(text):
 ## ---------------------------------------------------------------------------------------------
 GETTING_STARTED = [
 ('requirements', 'Requirements', r'''
-<p>AGENT-P runs on <strong>Linux</strong> and <strong>macOS</strong>. It is a Python package that calls a few genetics programs, all of which are installed together with conda in the next step:</p>
+<p>AGENT-P runs on <strong>Linux</strong>. It is a Python package that calls a few genetics programs, all of which are installed together with conda in the next step:</p>
 <div class="table-scroll"><table>
   <thead><tr><th scope="col">Software</th><th scope="col">Version</th><th scope="col">Used for</th></tr></thead>
   <tbody>
     <tr><td>Python</td><td>3.10</td><td>AGENT-P itself, with numpy (&lt; 2), pandas, SciPy (&ge; 1.11), statsmodels, h5py, matplotlib, and bgen-reader</td></tr>
-    <tr><td><a href="https://www.cog-genomics.org/plink/2.0/">PLINK 2</a></td><td>2.00a5.12</td><td>quality control of genotypes, and preparing genotypes for the models</td></tr>
+    <tr><td><a href="https://www.cog-genomics.org/plink/2.0/">PLINK 2</a></td><td>2.00a5.12</td><td>quality control of genotypes, and preparing genotypes for the models of gene expression</td></tr>
     <tr><td><a href="https://enkre.net/cgi-bin/code/bgen/doc/trunk/doc/wiki/bgenix.md">bgenix</a></td><td>1.1.7</td><td>reading genotypes in BGEN format</td></tr>
     <tr><td><a href="https://rgcgithub.github.io/regenie">REGENIE</a></td><td>3.6</td><td>GWAS (optional)</td></tr>
-    <tr><td>R</td><td>4.2</td><td>FUSION models (with optparse, RColorBrewer, and plink2R, which comes with AGENT-P)</td></tr>
+    <tr><td>R</td><td>4.2</td><td>FUSION models of gene expression (with optparse, RColorBrewer, and plink2R, which comes with AGENT-P)</td></tr>
   </tbody>
 </table></div>
 <ul class="list">
-  <li><strong>Disk space:</strong> about 2 GB for the expression models.</li>
+  <li><strong>Disk space:</strong> about 2 GB for the models of gene expression.</li>
   <li><strong>Memory:</strong> a laptop with 8 GB is enough for the example. For large cohorts (tens of thousands of subjects), use a computing cluster.</li>
-  <li><strong>Windows:</strong> use <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> (Windows Subsystem for Linux) and follow the Linux instructions.</li>
+</ul>
+<h3>Tips for macOS and Windows</h3>
+<ul class="list">
+  <li><strong>macOS:</strong> follow the same instructions as on Linux. On a Mac with an Apple chip (M1&ndash;M4), create the environment with the extra setting in <a href="#install">Install</a>: the genetics programs are only available for Intel Macs, and run through Rosetta (if it is not installed, run <code>softwareupdate --install-rosetta</code>). The first run can take a few extra minutes while Rosetta translates the programs.</li>
+  <li><strong>Windows:</strong> use <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> (Windows Subsystem for Linux), and follow the Linux instructions inside it.</li>
 </ul>
 '''),
 
 ('install', 'Install', r'''
 <p>The easiest way to install AGENT-P and everything it needs is with conda (if you do not have conda, install <a href="https://github.com/conda-forge/miniforge">Miniforge</a> first). Open a terminal and run:</p>
 <<<Terminal
+cd ~                                                      # download AGENT-P into your home folder
 %CLONE%
-cd agentp
-conda env create -f environment.yml      # takes 5-15 minutes
+conda env create -f ~/agentp/environment.yml              # takes 5-15 minutes
 conda activate agentp
-pip install --no-deps -e .
-R CMD INSTALL agentp/external/plink2R/plink2R
+pip install --no-deps -e ~/agentp
+R CMD INSTALL ~/agentp/agentp/external/plink2R/plink2R
 >>>
-<p>The commands on this page are run from this <code>agentp</code> folder.</p>
-<p><strong>On a Mac with an Apple chip (M1&ndash;M4)</strong>, create the environment with the line below instead (the genetics programs are only available for Intel Macs, and run through Rosetta), and run <code>conda config --env --set subdir osx-64</code> after <code>conda activate agentp</code>:</p>
+<p>AGENT-P is now in <code>~/agentp</code> (<code>~</code> is your home folder). The commands on this site use this path; if you downloaded AGENT-P elsewhere, change <code>~/agentp</code> in the commands.</p>
+<p><strong>On a Mac with an Apple chip (M1&ndash;M4)</strong>, use these commands instead (the genetics programs are only available for Intel Macs, and run through Rosetta):</p>
 <<<Terminal
-CONDA_SUBDIR=osx-64 conda env create -f environment.yml
+cd ~
+%CLONE%
+CONDA_SUBDIR=osx-64 conda env create -f ~/agentp/environment.yml
+conda activate agentp
+conda config --env --set subdir osx-64
+pip install --no-deps -e ~/agentp
+R CMD INSTALL ~/agentp/agentp/external/plink2R/plink2R
 >>>
 <p class="note">Each time you open a new terminal, run <code>conda activate agentp</code> before using AGENT-P.</p>
 
@@ -95,22 +105,15 @@ CONDA_SUBDIR=osx-64 conda env create -f environment.yml
 <<<Terminal
 pip install agentp
 >>>
-<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately. Download the expression models (<code>models.tar.gz</code>, about 2 GB: the models of the four TWAS methods for the eight brain regions; see <a href="#models">Download the models</a>), and tell AGENT-P where they are at the start of each script:</p>
-<<<Python
-from agentp import set_models_dir
-set_models_dir('/path/to/models')
->>>
-
+<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately.</p>
 '''),
 
-('models', 'Download the models', r'''
-<p>The expression models (about 2 GB) are not included in the GitHub repository. Download <a href="%MODELS%"><code>models.tar.gz</code></a> and extract it into the <code>agentp</code> folder inside the repository:</p>
+('models', 'Download the models of gene expression', r'''
+<p>The models of gene expression (about 2 GB) are not included in the GitHub repository. Download <a href="%MODELS%"><code>models.tar.gz</code></a> and extract it into <code>~/agentp/agentp</code>, the <code>agentp</code> folder inside the repository:</p>
 <<<Terminal
-cd agentp                                # the "agentp" folder inside the downloaded repository
-tar -xzf ~/Downloads/models.tar.gz       # change the path if you saved the file elsewhere
-cd ..
+tar -xzf ~/Downloads/models.tar.gz -C ~/agentp/agentp     # change ~/Downloads if you saved the file elsewhere
 >>>
-<p>The models are now in <code>agentp/models</code>: models from four TWAS methods for eight brain regions (GTEx v8). In AGENT-P, each method and region has a short code, and any method can be combined with any region, e.g. <code>SummaryTWAS(project, 'FUS', 'hippocampus')</code>:</p>
+<p>The models of gene expression are now in <code>~/agentp/agentp/models</code>: models from four TWAS methods for eight brain regions (GTEx v8). In AGENT-P, each method and region has a short code, and any method can be combined with any region, e.g. <code>SummaryTWAS(project, 'FUS', 'hippocampus')</code>:</p>
 <div class="table-scroll"><table class="codes">
   <thead><tr><th scope="col">Method</th><th scope="col">Code</th></tr></thead>
   <tbody>
@@ -133,12 +136,24 @@ cd ..
     <tr><td>Cerebellar hemisphere</td><td><code>cerebellar-hemi</code></td></tr>
   </tbody>
 </table></div>
-<p class="note">The example does not need this download: it uses a small set of example models that comes with AGENT-P.</p>
+<p>If you installed AGENT-P with pip, extract <code>models.tar.gz</code> into any folder (here <code>~/agentp_models</code>):</p>
+<<<Terminal
+mkdir -p ~/agentp_models
+tar -xzf ~/Downloads/models.tar.gz -C ~/agentp_models
+>>>
+<p>and tell AGENT-P where the models are at the start of each script:</p>
+<<<Python
+import os
+from agentp import set_models_dir
+set_models_dir(os.path.expanduser('~/agentp_models/models'))
+>>>
+<p class="note">The example does not need this download: it uses a small set of example models of gene expression that comes with AGENT-P.</p>
 '''),
 
 ('check', 'Check the installation', r'''
 <p>Each of these commands should print a version or a message, without errors:</p>
 <<<Terminal
+conda activate agentp
 python -c "import agentp; print('AGENT-P is ready')"
 plink2 --version
 bgenix -help | head -1
@@ -147,15 +162,15 @@ Rscript -e "suppressMessages(library(plink2R)); cat('plink2R is ready\n')"
 >>>
 <p>Then you can either:</p>
 <ol class="list">
-  <li>run the <a href="example.html#local">example on your computer</a>, which uses the small example models; or</li>
-  <li>use the full models: test the pipeline with <code>python tests/test_pipeline.py</code>, which runs every step of AGENT-P (add <code>--fusion</code> to include FUSION), then analyze your own data with the <a href="full-run.html">Full run</a>.</li>
+  <li>run the <a href="example.html#local">example on your computer</a>, which uses the small example models of gene expression; or</li>
+  <li>use the full models of gene expression: test the pipeline with <code>python ~/agentp/tests/test_pipeline.py</code>, which runs every step of AGENT-P (add <code>--fusion</code> to include FUSION), then analyze your own data with the <a href="full-run.html">Full run</a>.</li>
 </ol>
 '''),
 
 ('troubleshooting', 'Troubleshooting', r'''
 <ul class="list">
-  <li><strong><code>git clone</code> fails with an error about "LFS" or "smudge filter".</strong> Clone without the large files (the models come from the download above anyway): <code>GIT_LFS_SKIP_SMUDGE=1 %CLONE%</code>.</li>
-  <li><strong><code>conda env create</code> is very slow or runs out of memory.</strong> Use <a href="https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html">micromamba</a> with the same file: <code>micromamba create -f environment.yml</code>.</li>
+  <li><strong><code>git clone</code> fails with an error about "LFS" or "smudge filter".</strong> Clone without the large files (the models of gene expression come from the download above anyway): <code>cd ~ &amp;&amp; GIT_LFS_SKIP_SMUDGE=1 %CLONE%</code>.</li>
+  <li><strong><code>conda env create</code> is very slow or runs out of memory.</strong> Use <a href="https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html">micromamba</a> with the same file: <code>micromamba create -f ~/agentp/environment.yml</code>.</li>
   <li><strong><code>numpy</code> or <code>h5py</code> errors after installing.</strong> AGENT-P was installed without <code>--no-deps</code>, and pip replaced conda's packages. Remove the environment (<code>conda env remove -n agentp</code>) and install again.</li>
   <li><strong>On a Mac: "incompatible architecture".</strong> The environment was created without <code>CONDA_SUBDIR=osx-64</code>. Remove it and create it again as above. The first run on a Mac can take a few extra minutes while Rosetta translates the programs.</li>
 </ul>
@@ -172,9 +187,9 @@ EXAMPLE = [
 <ul class="list">
   <li><strong>Subjects:</strong> 2,000 example subjects, with genotypes (chromosomes 1&ndash;22), covariates (age, sex, and 3 genetic principal components), and four brain volumes</li>
   <li><strong>GWAS:</strong> a GWAS of amygdala volume in the same subjects, for the summary-level TWAS</li>
-  <li><strong>Models:</strong> a small set of caudate models</li>
+  <li><strong>Models:</strong> a small set of models of caudate gene expression</li>
 </ul>
-<p>It tests predicted gene expression in the <strong>caudate</strong> (JTI models) for association with <strong>amygdala volume</strong>.</p>
+<p>It tests predicted gene expression in the <strong>caudate</strong> (JTI models of gene expression) for association with <strong>amygdala volume</strong>.</p>
 '''),
 
 ('steps', 'What the notebook does', r'''
@@ -183,7 +198,7 @@ EXAMPLE = [
   <tbody>
     <tr><td>1. Install</td><td>downloads AGENT-P from GitHub and installs it with the programs it needs (about 5&ndash;8 minutes)</td></tr>
     <tr><td>2. Create the project</td><td>loads the example subjects, and quality-controls their genotypes</td></tr>
-    <tr><td>3. Summary-level TWAS</td><td>combines the GWAS of amygdala volume with the JTI caudate models</td></tr>
+    <tr><td>3. Summary-level TWAS</td><td>combines the GWAS of amygdala volume with the JTI models of caudate gene expression</td></tr>
     <tr><td>4. Genotype-level TWAS</td><td>predicts caudate gene expression for each subject, then tests it for association with amygdala volume (the longest step)</td></tr>
     <tr><td>5. Results</td><td>shows how many genes were tested and the top genes of both TWAS</td></tr>
     <tr><td>6. Plots</td><td>a Manhattan plot of the genotype-level TWAS, and a Miami plot comparing both TWAS</td></tr>
@@ -194,8 +209,13 @@ EXAMPLE = [
 
 ('change', 'Try other models or traits', r'''
 <p><strong>Another model set:</strong> in the TWAS cells of the notebook, replace <code>'JTI'</code> with <code>'PDX'</code> (PrediXcan), <code>'UTM'</code> (UTMOST), or <code>'FUS'</code> (FUSION), and replace <code>JTI_caudate</code> in the results and plot cells with the matching folder name (e.g. <code>PDX_caudate</code>).</p>
-<p><strong>Another trait:</strong> the genotype-level TWAS can test any of the four example volumes (<code>putamen_volume</code>, <code>amygdala_volume</code>, <code>hippocampus_volume</code>, <code>caudate_volume</code>). The predicted gene expression is reused, so only the association test runs again:</p>
+<p><strong>Another trait:</strong> the genotype-level TWAS can test any of the four example volumes (<code>putamen_volume</code>, <code>amygdala_volume</code>, <code>hippocampus_volume</code>, <code>caudate_volume</code>). The predicted gene expression is reused, so only the association test runs again. Add this cell to the notebook after the genotype-level TWAS (like the other cells, it starts with <code>%%agentp</code>, which runs it with AGENT-P):</p>
 <<<Python
+%%agentp
+from agentp import Project, IndividualTWAS, set_models_dir
+set_models_dir('example_models')
+project = Project('example_run')
+
 itwas = IndividualTWAS(project, 'JTI', 'caudate')
 itwas.run_twas('hippocampus_volume')
 >>>
@@ -203,12 +223,12 @@ itwas.run_twas('hippocampus_volume')
 '''),
 
 ('local', 'Run the example on your computer', r'''
-<p>After <a href="getting-started.html">installing AGENT-P</a> (the full models are not needed), run the same example from the <code>agentp</code> folder:</p>
+<p>After <a href="getting-started.html">installing AGENT-P</a> (the full models of gene expression are not needed), run the same example:</p>
 <<<Terminal
-cd example
-python run_example.py
+conda activate agentp
+python ~/agentp/example/run_example.py
 >>>
-<p>It takes about 10 minutes. The results are saved in <code>example/example_run/</code>, and the plots in <code>example/example_run/figures/</code>. To analyze your own data, see <a href="full-run.html">Full run</a>.</p>
+<p>It takes about 10 minutes. The results are saved in <code>~/agentp/example/example_run/</code>, and the plots in <code>~/agentp/example/example_run/figures/</code>. To analyze your own data, see <a href="full-run.html">Full run</a>.</p>
 '''),
 ]
 
@@ -217,7 +237,7 @@ python run_example.py
 ## ---------------------------------------------------------------------------------------------
 FULL_RUN = [
 ('inputs', 'Input data', r'''
-<p>What you need depends on the TWAS you run. Summary-level TWAS needs only a GWAS; genotype-level TWAS (and GWAS) needs the data of individual subjects. Both use the full models (see <a href="getting-started.html#models">Getting started</a>), and all data must use rsIDs for SNPs.</p>
+<p>What you need depends on the TWAS you run. Summary-level TWAS needs only a GWAS; genotype-level TWAS (and GWAS) needs the data of individual subjects. Both use the full models of gene expression (see <a href="getting-started.html#models">Getting started</a>), and all data must use rsIDs for SNPs.</p>
 <div class="table-scroll"><table>
   <thead><tr><th scope="col">Input</th><th scope="col">Format</th><th scope="col">Added with</th></tr></thead>
   <tbody>
@@ -235,33 +255,47 @@ FULL_RUN = [
   <li>Tables are tab-separated by default; for comma-separated tables, add <code>sep=','</code>. To use only some columns, add <code>covar_cols=[...]</code> or <code>phen_cols=[...]</code>.</li>
   <li>AGENT-P cleans the genotypes before use: it keeps SNPs with less than 5% missing calls, a minor allele frequency of at least 1%, and a Hardy&ndash;Weinberg equilibrium p-value above 1e-5.</li>
   <li>Genotypes in VCF format can be converted to BGEN with <code>plink2</code> (see <a href="#troubleshooting">Troubleshooting</a>).</li>
-  <li>Example files of every kind are in <code>example/example_data</code>.</li>
+  <li>Example files of every kind are in <code>~/agentp/example/example_data</code>. The code on this page uses them, so each piece of code runs as is; replace them with your own files.</li>
 </ul>
 '''),
 
 ('project', 'Create a project', r'''
-<p>Write the steps on this page in a Python script (for example <code>my_analysis.py</code>), and run it with <code>python my_analysis.py</code>.</p>
+<p>Write the steps on this page in a Python script (for example <code>~/my_analysis.py</code>), and run it with <code>python ~/my_analysis.py</code>.</p>
 <p>A project is a folder that keeps the inputs and results of one cohort together.</p>
 <<<Python
+import os
 from agentp import Project
-project = Project('my_project')     # creates the folder "my_project"
+
+project = Project(os.path.expanduser('~/my_project'))     # creates the folder ~/my_project
 >>>
 '''),
 
 ('summary', 'Summary-level TWAS', r'''
 <p>From GWAS summary statistics of a trait:</p>
 <<<Python
-from agentp import SummaryTWAS
+import os
+from agentp import Project, SummaryTWAS
 
-stwas = SummaryTWAS(project, 'JTI', 'caudate')                  # model method and brain region
-stwas.add_gwas('putamen_volume', 'putamen_volume_gwas.txt')     # trait name and GWAS file
-stwas.run_twas('putamen_volume')
+data = os.path.expanduser('~/agentp/example/example_data')       # the folder of your data (here: the example data)
+project = Project(os.path.expanduser('~/my_project'))
+
+stwas = SummaryTWAS(project, 'JTI', 'caudate')                                  # model method and brain region
+stwas.add_gwas('amygdala_volume', f'{data}/amygdala_volume_gwas.regenie.gz')    # trait name and GWAS file
+stwas.run_twas('amygdala_volume')
 >>>
 <p><strong>Column names.</strong> GWAS files made with AGENT-P's <code>GWAS</code> (see <a href="#options">More options</a>) are read without any extra settings. For other files, including REGENIE's own output, tell AGENT-P the column names:</p>
 <<<Python
-stwas.add_gwas('putamen_volume', 'putamen_volume_gwas.txt', sep='\t',
-               snp_col='rsid', alt_col='a2', ref_col='a1',
-               beta_col='beta', beta_se_col='se', pval_col='pval')
+import os
+from agentp import Project, SummaryTWAS
+
+data = os.path.expanduser('~/agentp/example/example_data')       # the folder of your data (here: the example data)
+project = Project(os.path.expanduser('~/my_project'))
+
+stwas = SummaryTWAS(project, 'JTI', 'caudate')
+stwas.add_gwas('amygdala_volume', f'{data}/amygdala_volume_gwas.regenie.gz', sep=',',     # the column names in your file
+               snp_col='SNP', alt_col='ALLELE1', ref_col='ALLELE0',
+               beta_col='BETA', beta_se_col='SE', pval_col='PVAL')
+stwas.run_twas('amygdala_volume')
 >>>
 <ul class="list">
   <li><code>alt_col</code> is the <strong>effect allele</strong>: the allele that the beta refers to. <code>ref_col</code> is the other allele.</li>
@@ -273,18 +307,27 @@ stwas.add_gwas('putamen_volume', 'putamen_volume_gwas.txt', sep='\t',
 ('genotype', 'Genotype-level TWAS', r'''
 <p>From individual-level data. First add the subject data to the project (only once per project; see <a href="#inputs">Input data</a> for the file formats):</p>
 <<<Python
-project.set_subjects('subjects.txt')             # subject IDs
-project.add_covariates('covariates.txt')         # e.g. age, sex, genetic principal components
-project.add_phenotypes('phenotypes.txt')         # one or more traits
-project.add_genotypes('genotypes', 'chr*.bgen')  # folder, and file names with * for the chromosome number
+import os
+from agentp import Project
+
+data = os.path.expanduser('~/agentp/example/example_data')       # the folder of your data (here: the example data)
+project = Project(os.path.expanduser('~/my_project'))
+
+project.set_subjects(f'{data}/subjects.txt')                  # subject IDs
+project.add_covariates(f'{data}/covariates.csv')              # e.g. age, sex, genetic principal components
+project.add_phenotypes(f'{data}/volumes.csv')                 # one or more traits
+project.add_genotypes(f'{data}/genotypes', 'test_c*.bgen')    # folder, and file names with * for the chromosome number
 >>>
 <p>Then predict gene expression and test the traits:</p>
 <<<Python
-from agentp import IndividualTWAS
+import os
+from agentp import Project, IndividualTWAS
+
+project = Project(os.path.expanduser('~/my_project'))     # the project with the subject data
 
 itwas = IndividualTWAS(project, 'JTI', 'caudate')
-itwas.predict_grex()                         # predict gene expression (once per method and region)
-itwas.run_twas('putamen_volume')             # or a list: ['putamen_volume', 'caudate_volume']
+itwas.predict_grex()                          # predict gene expression (once per method and region)
+itwas.run_twas('amygdala_volume')             # or a list: ['amygdala_volume', 'caudate_volume']
 >>>
 '''),
 
@@ -293,57 +336,72 @@ itwas.run_twas('putamen_volume')             # or a list: ['putamen_volume', 'ca
 <div class="table-scroll"><table>
   <thead><tr><th scope="col">TWAS</th><th scope="col">Results file</th></tr></thead>
   <tbody>
-    <tr><td>Summary-level</td><td><code>my_project/sTWAS/JTI_caudate/putamen_volume.csv</code></td></tr>
-    <tr><td>Genotype-level</td><td><code>my_project/iTWAS/JTI_caudate/putamen_volume.csv</code></td></tr>
+    <tr><td>Summary-level</td><td><code>~/my_project/sTWAS/JTI_caudate/amygdala_volume.csv</code></td></tr>
+    <tr><td>Genotype-level</td><td><code>~/my_project/iTWAS/JTI_caudate/amygdala_volume.csv</code></td></tr>
   </tbody>
 </table></div>
 <p>The most important columns are <code>gene</code> (Ensembl gene ID), <code>zscore</code> (direction and strength of the association: positive means that higher expression goes with a larger trait value), and <code>pvalue</code>. A common threshold for significance is a Bonferroni correction: p &lt; 0.05 / (number of genes tested).</p>
 <p><strong>Plots</strong> (saved as image files):</p>
 <<<Python
+import os
 from agentp import load_pvalues, manhattan_plot, miami_plot, scatter_plot
 
-s = load_pvalues('my_project/sTWAS/JTI_caudate/putamen_volume.csv')
-g = load_pvalues('my_project/iTWAS/JTI_caudate/putamen_volume.csv')
+project_dir = os.path.expanduser('~/my_project')
+s = load_pvalues(f'{project_dir}/sTWAS/JTI_caudate/amygdala_volume.csv')
+g = load_pvalues(f'{project_dir}/iTWAS/JTI_caudate/amygdala_volume.csv')
 
-manhattan_plot(g, label='Genotype-level TWAS', out_file='manhattan.png')        # one set of results
+manhattan_plot(g, label='Genotype-level TWAS', out_file=f'{project_dir}/manhattan.png')     # one set of results
 miami_plot(s, g, top_label='Summary-level TWAS', bottom_label='Genotype-level TWAS',
-           out_file='miami.png')                                                # two sets, mirrored
+           out_file=f'{project_dir}/miami.png')                                             # two sets, mirrored
 scatter_plot(s, g, x_label='Summary-level TWAS', y_label='Genotype-level TWAS',
-             out_file='scatter.png')                                            # two sets, gene by gene
+             out_file=f'{project_dir}/scatter.png')                                         # two sets, gene by gene
 >>>
 <p>Significant genes (Bonferroni) are colored, and the dashed lines show the significance thresholds.</p>
 '''),
 
 ('acat', 'Meta-analysis TWAS with ACAT', r'''
-<p><code>run_all_twas</code> runs TWAS with every model (4 methods &times; 8 brain regions = 32 model sets), then combines the p-values of each gene into one p-value with ACAT (Aggregated Cauchy Association Test):</p>
+<p><code>run_all_twas</code> runs TWAS with every model of gene expression (4 methods &times; 8 brain regions = 32 model sets), then combines the p-values of each gene into one p-value with ACAT (Aggregated Cauchy Association Test):</p>
 <<<Python
-from agentp import run_all_twas
+import os
+from agentp import Project, run_all_twas
+
+data = os.path.expanduser('~/agentp/example/example_data')       # the folder of your data (here: the example data)
+project = Project(os.path.expanduser('~/my_project'))
 
 # summary-level TWAS
-run_all_twas(project, 'putamen_volume', twas_type='stwas',
-             gwas_files={'putamen_volume': 'putamen_volume_gwas.txt'})
+run_all_twas(project, 'amygdala_volume', twas_type='stwas',
+             gwas_files={'amygdala_volume': f'{data}/amygdala_volume_gwas.regenie.gz'})
 
 # genotype-level TWAS (after adding the subject data)
-run_all_twas(project, 'putamen_volume', twas_type='itwas')
+run_all_twas(project, 'amygdala_volume', twas_type='itwas')
 >>>
-<p>The combined results are saved to <code>my_project/sTWAS/ACAT/putamen_volume.csv</code> (or <code>iTWAS/ACAT/</code>). This table has one p-value column per model set, <code>n_models</code> (how many models tested the gene), and the combined p-value (<code>sTWAS_ACAT</code> or <code>iTWAS_ACAT</code>). Genes tested by fewer than 4 models get no combined p-value.</p>
-<p>If your GWAS file is not in REGENIE format, give the column names once for all files: <code>gwas_params={'sep': '\t', 'snp_col': 'rsid', 'alt_col': 'a2', ...}</code>. To combine results that you already ran one model at a time, use <code>collect_twas(project, 'putamen_volume')</code>.</p>
+<p>The combined results are saved to <code>~/my_project/sTWAS/ACAT/amygdala_volume.csv</code> (or <code>~/my_project/iTWAS/ACAT/</code>). This table has one p-value column per model set, <code>n_models</code> (how many models tested the gene), and the combined p-value (<code>sTWAS_ACAT</code> or <code>iTWAS_ACAT</code>). Genes tested by fewer than 4 models get no combined p-value.</p>
+<p>If your GWAS file is not in REGENIE format, give the column names once for all files: <code>gwas_params={'sep': '\t', 'snp_col': 'rsid', 'alt_col': 'a2', ...}</code>. To combine results that you already ran one model at a time, use <code>collect_twas(project, 'amygdala_volume')</code>.</p>
 '''),
 
 ('options', 'More options', r'''
 <ul class="list">
   <li><strong>Run a GWAS</strong> (needs the subject data):
 <<<Python
-from agentp import GWAS
-GWAS(project).run(['putamen_volume', 'caudate_volume'])    # saved to my_project/GWAS/
+import os
+from agentp import Project, GWAS
+
+project = Project(os.path.expanduser('~/my_project'))     # the project with the subject data
+GWAS(project).run(['amygdala_volume', 'caudate_volume'])      # saved to ~/my_project/GWAS/
 >>></li>
-  <li><strong>Add other models.</strong> Models in PredictDB format (a <code>.db</code> weights file and a <code>.txt.gz</code> covariance file, e.g. other GTEx tissues) can be added and then used like the built-in ones:
+  <li><strong>Add other models of gene expression.</strong> Models in PredictDB format (a <code>.db</code> weights file and a <code>.txt.gz</code> covariance file, e.g. other GTEx tissues) can be added and then used like the built-in ones:
 <<<Python
-project.add_model('PDX', 'hypothalamus', weights='en_Brain_Hypothalamus.db',
-                  covariance='en_Brain_Hypothalamus.txt.gz')
+import os
+from agentp import Project, SummaryTWAS
+
+project = Project(os.path.expanduser('~/my_project'))
+models = os.path.expanduser('~/Downloads')      # the folder with the model files
+
+project.add_model('PDX', 'hypothalamus', weights=f'{models}/en_Brain_Hypothalamus.db',
+                  covariance=f'{models}/en_Brain_Hypothalamus.txt.gz')
 stwas = SummaryTWAS(project, 'PDX', 'hypothalamus')
 >>></li>
-  <li><strong>Run again and replace old results:</strong> add <code>overwrite=True</code>, e.g. <code>stwas.run_twas('putamen_volume', overwrite=True)</code>. Without it, AGENT-P skips results that already exist.</li>
+  <li><strong>Run again and replace old results:</strong> add <code>overwrite=True</code>, e.g. <code>stwas.run_twas('amygdala_volume', overwrite=True)</code>. Without it, AGENT-P skips results that already exist.</li>
   <li><strong>Several traits in parallel:</strong> <code>run_twas([...], num_threads=4)</code> runs 4 traits at the same time.</li>
 </ul>
 '''),
@@ -352,12 +410,14 @@ stwas = SummaryTWAS(project, 'PDX', 'hypothalamus')
 <ul class="list">
   <li><strong>My genotypes are in VCF format.</strong> Convert them to BGEN, one file per chromosome:
 <<<Terminal
+conda activate agentp
+mkdir -p ~/my_data/genotypes
 for c in $(seq 1 22); do
-    plink2 --vcf chr${c}.dose.vcf.gz dosage=DS --double-id --export bgen-1.2 bits=8 --out genotypes/chr${c}
+    plink2 --vcf ~/my_data/chr${c}.dose.vcf.gz dosage=DS --double-id --export bgen-1.2 bits=8 --out ~/my_data/genotypes/chr${c}
 done
 >>>
   SNP IDs must be rsIDs. If your VCF uses other IDs (e.g. <code>chr1:12345:A:G</code>), add rsIDs first (e.g. with <code>bcftools annotate</code> and a dbSNP file).</li>
-  <li><strong>Very few genes are tested.</strong> The SNP IDs in your GWAS or genotypes do not match the models: check that they are rsIDs.</li>
+  <li><strong>Very few genes are tested.</strong> The SNP IDs in your GWAS or genotypes do not match the models of gene expression: check that they are rsIDs.</li>
   <li><strong>Problems with the installation:</strong> see <a href="getting-started.html#troubleshooting">Getting started</a>.</li>
 </ul>
 '''),
@@ -606,7 +666,7 @@ CLASSES_INTRO_TEXT = ('The classes of AGENT-P, each with what it needs, what it 
 ## ---------------------------------------------------------------------------------------------
 HOME = [
 ('try', 'Try it online', r'''
-<p>The example notebook runs in Google Colab, with nothing to install. It runs summary-level and genotype-level TWAS on 2,000 example subjects with the JTI caudate models and amygdala volume, then shows the top genes and Manhattan and Miami plots.</p>
+<p>The example notebook runs in Google Colab, with nothing to install. It runs summary-level and genotype-level TWAS on 2,000 example subjects with the JTI models of caudate gene expression and amygdala volume, then shows the top genes and Manhattan and Miami plots.</p>
 <p><a href="%COLAB%">Open the example in Colab</a>, then choose <strong>Runtime &rarr; Run all</strong>. The <a href="example.html">Example</a> page explains each step.</p>
 '''),
 
@@ -624,8 +684,8 @@ HOME_INTRO = r'''
 <div class="intro" id="overview">
   <h1>AGENT-P</h1>
   <p class="full-name">Association of Gene Expression to Neuroimaging Traits Pipeline</p>
-  <p>A Python package for transcriptome-wide association studies (TWAS) of brain traits. AGENT-P predicts how much each gene is expressed in the brain from a person's genotypes (genetically regulated gene expression, or GREx), and tests whether this predicted expression is associated with a trait, such as the volume of a brain region.</p>
-  <p>It includes ready-to-use expression models from four TWAS methods in eight brain regions, and runs TWAS in two ways:</p>
+  <p>An integrated, comprehensive, and accessible pipeline for transcriptome-wide association studies (TWAS) of neuroimaging phenotypes. TWAS predicts how much each gene is expressed in the brain from a person's genotypes (genetically regulated gene expression, or GREx), and tests whether this predicted expression is associated with a trait, such as the volume of a brain region.</p>
+  <p>AGENT-P integrates four popular TWAS methods for eight cortical and subcortical regions, and can be readily extended to include additional models of gene expression and brain regions. It runs TWAS in two ways:</p>
   <div class="table-scroll"><table>
     <thead><tr><th scope="col">TWAS</th><th scope="col">Input</th><th scope="col">AGENT-P class</th></tr></thead>
     <tbody>
@@ -633,11 +693,10 @@ HOME_INTRO = r'''
       <tr><td>Genotype-level</td><td>genotypes, covariates, and trait values of individual subjects</td><td><code>IndividualTWAS</code></td></tr>
     </tbody>
   </table></div>
-  <p>AGENT-P can also separately run a GWAS with REGENIE, combine the results of all models into one p-value per gene as meta-analysis TWAS (ACAT), and make Manhattan and Miami plots.</p>
+  <p>AGENT-P can also separately run a GWAS with REGENIE, combine the results of all models of gene expression into one p-value per gene as meta-analysis TWAS (ACAT), and make Manhattan and Miami plots.</p>
   <p class="buttons" aria-label="Project resources">
     <a class="button" href="%COLAB%">Google Colab</a>
     <a class="button" href="https://pypi.org/project/agentp/">PyPI</a>
-    <a class="button" href="%MODELS%">Models (2 GB)</a>
     <a class="button dark" href="%REPO%/tree/%BRANCH%">GitHub</a>
   </p>
   <span id="install"></span><span id="quickstart"></span><span id="models"></span><span id="api"></span>
@@ -650,11 +709,11 @@ def page_intro(title, text):
 ## (file, sidebar label, <title>, description, intro, sections, numbered sections, legacy anchors)
 PAGES = [
     ('index.html', 'Home', 'AGENT-P',
-     'AGENT-P: the Association of Gene Expression to Neuroimaging Traits Pipeline. A Python package for transcriptome-wide association studies (TWAS) of brain traits.',
+     'AGENT-P: the Association of Gene Expression to Neuroimaging Traits Pipeline. An integrated, comprehensive, and accessible pipeline for transcriptome-wide association studies (TWAS) of neuroimaging phenotypes.',
      HOME_INTRO, HOME, False, {}),
     ('getting-started.html', 'Getting started', 'Getting started · AGENT-P',
-     'Requirements, installation, and the expression models of AGENT-P.',
-     page_intro('Getting started', 'What AGENT-P needs, how to install it, and how to download the expression models.'),
+     'Requirements, installation, and the models of gene expression of AGENT-P.',
+     page_intro('Getting started', 'What AGENT-P needs, how to install it, and how to download the models of gene expression.'),
      GETTING_STARTED, True, {}),
     ('example.html', 'Example', 'Example · AGENT-P',
      'Run the AGENT-P example in Google Colab or on your computer.',
@@ -665,10 +724,6 @@ PAGES = [
      page_intro('Full run', 'Run TWAS on your own data: the input data you need, summary-level and genotype-level TWAS, results and plots, and meta-analysis TWAS with ACAT.'),
      FULL_RUN, True, {'project': ['api']}),
 ]
-
-
-ICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23245b85'/%3E"
-        "%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='15' font-weight='700' fill='white' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E")
 
 
 def sidebar(current):
@@ -693,7 +748,6 @@ def sidebar(current):
       <li><a href="%COLAB%">Try it in Colab</a></li>
       <li><a href="%REPO%/tree/%BRANCH%">GitHub</a></li>
       <li><a href="https://pypi.org/project/agentp/">PyPI</a></li>
-      <li><a href="%MODELS%">Models (2 GB)</a></li>
     </ul>
   </aside>"""
 
@@ -719,7 +773,7 @@ for fname, label, title, desc, intro, sections, numbered, legacy in PAGES:
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canonical}">
-<link rel="icon" href="{ICON}">
+<link rel="icon" type="image/jpeg" href="icon.jpeg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -735,7 +789,6 @@ for fname, label, title, desc, intro, sections, numbered, legacy in PAGES:
 """ + ("""
     <div class="status" role="status" aria-live="polite" id="copy-status"></div>""" if has_code else "") + f"""
   </main>
-  <footer><a href="https://rubinovlab.net">Rubinov Lab</a>, Vanderbilt University · <a href="{REPO}/blob/main/LICENSE">MIT License</a></footer>
   </div>
 </div>
 <script src="site.js"></script>
@@ -756,6 +809,7 @@ for fname, *_ in PAGES:
     s = open(fname).read()
     s = s.replace('<link rel="stylesheet" href="style.css">', '<style>\n' + css + '\n</style>')
     s = s.replace('<script src="site.js"></script>', '<script>\n' + js + '\n</script>')
+    s = s.replace('href="icon.jpeg"', 'href="../icon.jpeg"')
     for other, *_ in PAGES:
         s = s.replace(f'href="{other}', f'href="preview_{other}')
     with open(f'preview/preview_{fname}', 'w') as f:

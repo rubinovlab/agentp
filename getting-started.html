@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Getting started · AGENT-P</title>
-<meta name="description" content="Requirements, installation, and the expression models of AGENT-P.">
+<meta name="description" content="Requirements, installation, and the models of gene expression of AGENT-P.">
 <link rel="canonical" href="https://agentp.rubinovlab.net/getting-started.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Getting started · AGENT-P">
-<meta property="og:description" content="Requirements, installation, and the expression models of AGENT-P.">
+<meta property="og:description" content="Requirements, installation, and the models of gene expression of AGENT-P.">
 <meta property="og:url" content="https://agentp.rubinovlab.net/getting-started.html">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23245b85'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='15' font-weight='700' fill='white' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/jpeg" href="icon.jpeg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
         <ol class="sub">
           <li><a href="#requirements">Requirements</a></li>
           <li><a href="#install">Install</a></li>
-          <li><a href="#models">Download the models</a></li>
+          <li><a href="#models">Download the models of gene expression</a></li>
           <li><a href="#check">Check the installation</a></li>
           <li><a href="#troubleshooting">Troubleshooting</a></li>
         </ol>
@@ -39,65 +39,70 @@
       <li><a href="https://colab.research.google.com/github/nhunghoang/agentp/blob/agentp-update-20261105/example/colab_example.ipynb">Try it in Colab</a></li>
       <li><a href="https://github.com/nhunghoang/agentp/tree/agentp-update-20261105">GitHub</a></li>
       <li><a href="https://pypi.org/project/agentp/">PyPI</a></li>
-      <li><a href="https://drive.google.com/file/d/1llysnSFOut3E_g1omlgQfi-N5fptuuLa/view?usp=sharing">Models (2 GB)</a></li>
     </ul>
   </aside>
   <div class="content">
   <main id="main">
 <div class="page-intro">
   <h1>Getting started</h1>
-  <p>What AGENT-P needs, how to install it, and how to download the expression models.</p>
+  <p>What AGENT-P needs, how to install it, and how to download the models of gene expression.</p>
 </div>
 
     <section id="requirements" aria-labelledby="requirements-title">
       <h2 id="requirements-title"><span class="num">1.</span>Requirements</h2>
-<p>AGENT-P runs on <strong>Linux</strong> and <strong>macOS</strong>. It is a Python package that calls a few genetics programs, all of which are installed together with conda in the next step:</p>
+<p>AGENT-P runs on <strong>Linux</strong>. It is a Python package that calls a few genetics programs, all of which are installed together with conda in the next step:</p>
 <div class="table-scroll"><table>
   <thead><tr><th scope="col">Software</th><th scope="col">Version</th><th scope="col">Used for</th></tr></thead>
   <tbody>
     <tr><td>Python</td><td>3.10</td><td>AGENT-P itself, with numpy (&lt; 2), pandas, SciPy (&ge; 1.11), statsmodels, h5py, matplotlib, and bgen-reader</td></tr>
-    <tr><td><a href="https://www.cog-genomics.org/plink/2.0/">PLINK 2</a></td><td>2.00a5.12</td><td>quality control of genotypes, and preparing genotypes for the models</td></tr>
+    <tr><td><a href="https://www.cog-genomics.org/plink/2.0/">PLINK 2</a></td><td>2.00a5.12</td><td>quality control of genotypes, and preparing genotypes for the models of gene expression</td></tr>
     <tr><td><a href="https://enkre.net/cgi-bin/code/bgen/doc/trunk/doc/wiki/bgenix.md">bgenix</a></td><td>1.1.7</td><td>reading genotypes in BGEN format</td></tr>
     <tr><td><a href="https://rgcgithub.github.io/regenie">REGENIE</a></td><td>3.6</td><td>GWAS (optional)</td></tr>
-    <tr><td>R</td><td>4.2</td><td>FUSION models (with optparse, RColorBrewer, and plink2R, which comes with AGENT-P)</td></tr>
+    <tr><td>R</td><td>4.2</td><td>FUSION models of gene expression (with optparse, RColorBrewer, and plink2R, which comes with AGENT-P)</td></tr>
   </tbody>
 </table></div>
 <ul class="list">
-  <li><strong>Disk space:</strong> about 2 GB for the expression models.</li>
+  <li><strong>Disk space:</strong> about 2 GB for the models of gene expression.</li>
   <li><strong>Memory:</strong> a laptop with 8 GB is enough for the example. For large cohorts (tens of thousands of subjects), use a computing cluster.</li>
-  <li><strong>Windows:</strong> use <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> (Windows Subsystem for Linux) and follow the Linux instructions.</li>
+</ul>
+<h3>Tips for macOS and Windows</h3>
+<ul class="list">
+  <li><strong>macOS:</strong> follow the same instructions as on Linux. On a Mac with an Apple chip (M1&ndash;M4), create the environment with the extra setting in <a href="#install">Install</a>: the genetics programs are only available for Intel Macs, and run through Rosetta (if it is not installed, run <code>softwareupdate --install-rosetta</code>). The first run can take a few extra minutes while Rosetta translates the programs.</li>
+  <li><strong>Windows:</strong> use <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> (Windows Subsystem for Linux), and follow the Linux instructions inside it.</li>
 </ul>
     </section>
 
     <section id="install" aria-labelledby="install-title">
       <h2 id="install-title"><span class="num">2.</span>Install</h2>
 <p>The easiest way to install AGENT-P and everything it needs is with conda (if you do not have conda, install <a href="https://github.com/conda-forge/miniforge">Miniforge</a> first). Open a terminal and run:</p>
-<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">git clone -b agentp-update-20261105 https://github.com/nhunghoang/agentp.git
-cd agentp
-conda env create -f environment.yml      <span class="c"># takes 5-15 minutes</span>
+<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">cd ~                                                      <span class="c"># download AGENT-P into your home folder</span>
+git clone -b agentp-update-20261105 https://github.com/nhunghoang/agentp.git
+conda env create -f ~/agentp/environment.yml              <span class="c"># takes 5-15 minutes</span>
 conda activate agentp
-pip install --no-deps -e .
-R CMD INSTALL agentp/external/plink2R/plink2R</pre></div>
-<p>The commands on this page are run from this <code>agentp</code> folder.</p>
-<p><strong>On a Mac with an Apple chip (M1&ndash;M4)</strong>, create the environment with the line below instead (the genetics programs are only available for Intel Macs, and run through Rosetta), and run <code>conda config --env --set subdir osx-64</code> after <code>conda activate agentp</code>:</p>
-<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">CONDA_SUBDIR=osx-64 conda env create -f environment.yml</pre></div>
+pip install --no-deps -e ~/agentp
+R CMD INSTALL ~/agentp/agentp/external/plink2R/plink2R</pre></div>
+<p>AGENT-P is now in <code>~/agentp</code> (<code>~</code> is your home folder). The commands on this site use this path; if you downloaded AGENT-P elsewhere, change <code>~/agentp</code> in the commands.</p>
+<p><strong>On a Mac with an Apple chip (M1&ndash;M4)</strong>, use these commands instead (the genetics programs are only available for Intel Macs, and run through Rosetta):</p>
+<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">cd ~
+git clone -b agentp-update-20261105 https://github.com/nhunghoang/agentp.git
+CONDA_SUBDIR=osx-64 conda env create -f ~/agentp/environment.yml
+conda activate agentp
+conda config --env --set subdir osx-64
+pip install --no-deps -e ~/agentp
+R CMD INSTALL ~/agentp/agentp/external/plink2R/plink2R</pre></div>
 <p class="note">Each time you open a new terminal, run <code>conda activate agentp</code> before using AGENT-P.</p>
 
 <h3>Install with pip (PyPI)</h3>
 <p>AGENT-P is also on <a href="https://pypi.org/project/agentp/">PyPI</a> (Python 3.9 or later):</p>
 <div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">pip install agentp</pre></div>
-<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately. Download the expression models (<code>models.tar.gz</code>, about 2 GB: the models of the four TWAS methods for the eight brain regions; see <a href="#models">Download the models</a>), and tell AGENT-P where they are at the start of each script:</p>
-<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">from</span> agentp <span class="k">import</span> set_models_dir
-set_models_dir(<span class="s">&#x27;/path/to/models&#x27;</span>)</pre></div>
+<p>This installs AGENT-P and its Python packages only. PLINK 2, bgenix, REGENIE, and R (with plink2R, for FUSION) must be installed separately.</p>
     </section>
 
     <section id="models" aria-labelledby="models-title">
-      <h2 id="models-title"><span class="num">3.</span>Download the models</h2>
-<p>The expression models (about 2 GB) are not included in the GitHub repository. Download <a href="https://drive.google.com/file/d/1llysnSFOut3E_g1omlgQfi-N5fptuuLa/view?usp=sharing"><code>models.tar.gz</code></a> and extract it into the <code>agentp</code> folder inside the repository:</p>
-<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">cd agentp                                <span class="c"># the &quot;agentp&quot; folder inside the downloaded repository</span>
-tar -xzf ~/Downloads/models.tar.gz       <span class="c"># change the path if you saved the file elsewhere</span>
-cd ..</pre></div>
-<p>The models are now in <code>agentp/models</code>: models from four TWAS methods for eight brain regions (GTEx v8). In AGENT-P, each method and region has a short code, and any method can be combined with any region, e.g. <code>SummaryTWAS(project, 'FUS', 'hippocampus')</code>:</p>
+      <h2 id="models-title"><span class="num">3.</span>Download the models of gene expression</h2>
+<p>The models of gene expression (about 2 GB) are not included in the GitHub repository. Download <a href="https://drive.google.com/file/d/1llysnSFOut3E_g1omlgQfi-N5fptuuLa/view?usp=sharing"><code>models.tar.gz</code></a> and extract it into <code>~/agentp/agentp</code>, the <code>agentp</code> folder inside the repository:</p>
+<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">tar -xzf ~/Downloads/models.tar.gz -C ~/agentp/agentp     <span class="c"># change ~/Downloads if you saved the file elsewhere</span></pre></div>
+<p>The models of gene expression are now in <code>~/agentp/agentp/models</code>: models from four TWAS methods for eight brain regions (GTEx v8). In AGENT-P, each method and region has a short code, and any method can be combined with any region, e.g. <code>SummaryTWAS(project, 'FUS', 'hippocampus')</code>:</p>
 <div class="table-scroll"><table class="codes">
   <thead><tr><th scope="col">Method</th><th scope="col">Code</th></tr></thead>
   <tbody>
@@ -120,29 +125,37 @@ cd ..</pre></div>
     <tr><td>Cerebellar hemisphere</td><td><code>cerebellar-hemi</code></td></tr>
   </tbody>
 </table></div>
-<p class="note">The example does not need this download: it uses a small set of example models that comes with AGENT-P.</p>
+<p>If you installed AGENT-P with pip, extract <code>models.tar.gz</code> into any folder (here <code>~/agentp_models</code>):</p>
+<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">mkdir -p ~/agentp_models
+tar -xzf ~/Downloads/models.tar.gz -C ~/agentp_models</pre></div>
+<p>and tell AGENT-P where the models are at the start of each script:</p>
+<div class="code"><div class="code-header"><span>Python</span></div><pre tabindex="0"><span class="k">import</span> os
+<span class="k">from</span> agentp <span class="k">import</span> set_models_dir
+set_models_dir(os.path.expanduser(<span class="s">&#x27;~/agentp_models/models&#x27;</span>))</pre></div>
+<p class="note">The example does not need this download: it uses a small set of example models of gene expression that comes with AGENT-P.</p>
     </section>
 
     <section id="check" aria-labelledby="check-title">
       <h2 id="check-title"><span class="num">4.</span>Check the installation</h2>
 <p>Each of these commands should print a version or a message, without errors:</p>
-<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">python -c &quot;import agentp; print(&#x27;AGENT-P is ready&#x27;)&quot;
+<div class="code"><div class="code-header"><span>Terminal</span></div><pre tabindex="0">conda activate agentp
+python -c &quot;import agentp; print(&#x27;AGENT-P is ready&#x27;)&quot;
 plink2 --version
 bgenix -help | head -1
 regenie --version
 Rscript -e &quot;suppressMessages(library(plink2R)); cat(&#x27;plink2R is ready\n&#x27;)&quot;</pre></div>
 <p>Then you can either:</p>
 <ol class="list">
-  <li>run the <a href="example.html#local">example on your computer</a>, which uses the small example models; or</li>
-  <li>use the full models: test the pipeline with <code>python tests/test_pipeline.py</code>, which runs every step of AGENT-P (add <code>--fusion</code> to include FUSION), then analyze your own data with the <a href="full-run.html">Full run</a>.</li>
+  <li>run the <a href="example.html#local">example on your computer</a>, which uses the small example models of gene expression; or</li>
+  <li>use the full models of gene expression: test the pipeline with <code>python ~/agentp/tests/test_pipeline.py</code>, which runs every step of AGENT-P (add <code>--fusion</code> to include FUSION), then analyze your own data with the <a href="full-run.html">Full run</a>.</li>
 </ol>
     </section>
 
     <section id="troubleshooting" aria-labelledby="troubleshooting-title">
       <h2 id="troubleshooting-title"><span class="num">5.</span>Troubleshooting</h2>
 <ul class="list">
-  <li><strong><code>git clone</code> fails with an error about "LFS" or "smudge filter".</strong> Clone without the large files (the models come from the download above anyway): <code>GIT_LFS_SKIP_SMUDGE=1 git clone -b agentp-update-20261105 https://github.com/nhunghoang/agentp.git</code>.</li>
-  <li><strong><code>conda env create</code> is very slow or runs out of memory.</strong> Use <a href="https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html">micromamba</a> with the same file: <code>micromamba create -f environment.yml</code>.</li>
+  <li><strong><code>git clone</code> fails with an error about "LFS" or "smudge filter".</strong> Clone without the large files (the models of gene expression come from the download above anyway): <code>cd ~ &amp;&amp; GIT_LFS_SKIP_SMUDGE=1 git clone -b agentp-update-20261105 https://github.com/nhunghoang/agentp.git</code>.</li>
+  <li><strong><code>conda env create</code> is very slow or runs out of memory.</strong> Use <a href="https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html">micromamba</a> with the same file: <code>micromamba create -f ~/agentp/environment.yml</code>.</li>
   <li><strong><code>numpy</code> or <code>h5py</code> errors after installing.</strong> AGENT-P was installed without <code>--no-deps</code>, and pip replaced conda's packages. Remove the environment (<code>conda env remove -n agentp</code>) and install again.</li>
   <li><strong>On a Mac: "incompatible architecture".</strong> The environment was created without <code>CONDA_SUBDIR=osx-64</code>. Remove it and create it again as above. The first run on a Mac can take a few extra minutes while Rosetta translates the programs.</li>
 </ul>
@@ -150,7 +163,6 @@ Rscript -e &quot;suppressMessages(library(plink2R)); cat(&#x27;plink2R is ready\
 
     <div class="status" role="status" aria-live="polite" id="copy-status"></div>
   </main>
-  <footer><a href="https://rubinovlab.net">Rubinov Lab</a>, Vanderbilt University · <a href="https://github.com/nhunghoang/agentp/blob/main/LICENSE">MIT License</a></footer>
   </div>
 </div>
 <script src="site.js"></script>

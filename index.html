@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AGENT-P</title>
-<meta name="description" content="AGENT-P: the Association of Gene Expression to Neuroimaging Traits Pipeline. A Python package for transcriptome-wide association studies (TWAS) of brain traits.">
+<meta name="description" content="AGENT-P: the Association of Gene Expression to Neuroimaging Traits Pipeline. An integrated, comprehensive, and accessible pipeline for transcriptome-wide association studies (TWAS) of neuroimaging phenotypes.">
 <link rel="canonical" href="https://agentp.rubinovlab.net/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AGENT-P">
-<meta property="og:description" content="AGENT-P: the Association of Gene Expression to Neuroimaging Traits Pipeline. A Python package for transcriptome-wide association studies (TWAS) of brain traits.">
+<meta property="og:description" content="AGENT-P: the Association of Gene Expression to Neuroimaging Traits Pipeline. An integrated, comprehensive, and accessible pipeline for transcriptome-wide association studies (TWAS) of neuroimaging phenotypes.">
 <meta property="og:url" content="https://agentp.rubinovlab.net/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23245b85'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='15' font-weight='700' fill='white' text-anchor='middle'%3EAP%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/jpeg" href="icon.jpeg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -36,7 +36,6 @@
       <li><a href="https://colab.research.google.com/github/nhunghoang/agentp/blob/agentp-update-20261105/example/colab_example.ipynb">Try it in Colab</a></li>
       <li><a href="https://github.com/nhunghoang/agentp/tree/agentp-update-20261105">GitHub</a></li>
       <li><a href="https://pypi.org/project/agentp/">PyPI</a></li>
-      <li><a href="https://drive.google.com/file/d/1llysnSFOut3E_g1omlgQfi-N5fptuuLa/view?usp=sharing">Models (2 GB)</a></li>
     </ul>
   </aside>
   <div class="content">
@@ -44,8 +43,8 @@
 <div class="intro" id="overview">
   <h1>AGENT-P</h1>
   <p class="full-name">Association of Gene Expression to Neuroimaging Traits Pipeline</p>
-  <p>A Python package for transcriptome-wide association studies (TWAS) of brain traits. AGENT-P predicts how much each gene is expressed in the brain from a person's genotypes (genetically regulated gene expression, or GREx), and tests whether this predicted expression is associated with a trait, such as the volume of a brain region.</p>
-  <p>It includes ready-to-use expression models from four TWAS methods in eight brain regions, and runs TWAS in two ways:</p>
+  <p>An integrated, comprehensive, and accessible pipeline for transcriptome-wide association studies (TWAS) of neuroimaging phenotypes. TWAS predicts how much each gene is expressed in the brain from a person's genotypes (genetically regulated gene expression, or GREx), and tests whether this predicted expression is associated with a trait, such as the volume of a brain region.</p>
+  <p>AGENT-P integrates four popular TWAS methods for eight cortical and subcortical regions, and can be readily extended to include additional models of gene expression and brain regions. It runs TWAS in two ways:</p>
   <div class="table-scroll"><table>
     <thead><tr><th scope="col">TWAS</th><th scope="col">Input</th><th scope="col">AGENT-P class</th></tr></thead>
     <tbody>
@@ -53,11 +52,10 @@
       <tr><td>Genotype-level</td><td>genotypes, covariates, and trait values of individual subjects</td><td><code>IndividualTWAS</code></td></tr>
     </tbody>
   </table></div>
-  <p>AGENT-P can also separately run a GWAS with REGENIE, combine the results of all models into one p-value per gene as meta-analysis TWAS (ACAT), and make Manhattan and Miami plots.</p>
+  <p>AGENT-P can also separately run a GWAS with REGENIE, combine the results of all models of gene expression into one p-value per gene as meta-analysis TWAS (ACAT), and make Manhattan and Miami plots.</p>
   <p class="buttons" aria-label="Project resources">
     <a class="button" href="https://colab.research.google.com/github/nhunghoang/agentp/blob/agentp-update-20261105/example/colab_example.ipynb">Google Colab</a>
     <a class="button" href="https://pypi.org/project/agentp/">PyPI</a>
-    <a class="button" href="https://drive.google.com/file/d/1llysnSFOut3E_g1omlgQfi-N5fptuuLa/view?usp=sharing">Models (2 GB)</a>
     <a class="button dark" href="https://github.com/nhunghoang/agentp/tree/agentp-update-20261105">GitHub</a>
   </p>
   <span id="install"></span><span id="quickstart"></span><span id="models"></span><span id="api"></span>
@@ -65,7 +63,7 @@
 
     <section id="try" aria-labelledby="try-title">
       <h2 id="try-title">Try it online</h2>
-<p>The example notebook runs in Google Colab, with nothing to install. It runs summary-level and genotype-level TWAS on 2,000 example subjects with the JTI caudate models and amygdala volume, then shows the top genes and Manhattan and Miami plots.</p>
+<p>The example notebook runs in Google Colab, with nothing to install. It runs summary-level and genotype-level TWAS on 2,000 example subjects with the JTI models of caudate gene expression and amygdala volume, then shows the top genes and Manhattan and Miami plots.</p>
 <p><a href="https://colab.research.google.com/github/nhunghoang/agentp/blob/agentp-update-20261105/example/colab_example.ipynb">Open the example in Colab</a>, then choose <strong>Runtime &rarr; Run all</strong>. The <a href="example.html">Example</a> page explains each step.</p>
     </section>
 
@@ -80,7 +78,6 @@
     </section>
 
   </main>
-  <footer><a href="https://rubinovlab.net">Rubinov Lab</a>, Vanderbilt University · <a href="https://github.com/nhunghoang/agentp/blob/main/LICENSE">MIT License</a></footer>
   </div>
 </div>
 <script src="site.js"></script>
